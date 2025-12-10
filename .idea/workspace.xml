@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="feat(core): 新增核心配置与安全服务代码">
+    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/config/AppConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/notary/AppTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +33,11 @@
       </MavenImportingSettings>
     </option>
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="36elqeldvF8w0Z21qaJPqAzJWQW" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -48,6 +52,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
+    "last_opened_file_path": "F:/program/javacode/notary-server-javalin",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -57,10 +62,23 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.build.tools.auto.reload": "ALL",
-    "settings.editor.selected.configurable": "build.tools",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
@@ -69,7 +87,10 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1765357287762</updated>
-      <workItem from="1765357288961" duration="13566000" />
+      <workItem from="1765357288961" duration="13713000" />
+      <workItem from="1765375121474" duration="40000" />
+      <workItem from="1765375169328" duration="86000" />
+      <workItem from="1765375279246" duration="351000" />
     </task>
     <task id="LOCAL-00001" summary="feat(core): 新增核心配置与安全服务代码">
       <option name="closed" value="true" />
@@ -79,7 +100,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765370144622</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖&#10;style: 调整workspace.xml中的自动重载类型设置&#10;refactor: 移除无效的单元测试类AppTest&#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置">
+      <option name="closed" value="true" />
+      <created>1765374734210</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1765374734210</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -87,6 +116,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat(core): 新增核心配置与安全服务代码" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(core): 新增核心配置与安全服务代码" />
+    <MESSAGE value="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖&#10;style: 调整workspace.xml中的自动重载类型设置&#10;refactor: 移除无效的单元测试类AppTest&#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖&#10;style: 调整workspace.xml中的自动重载类型设置&#10;refactor: 移除无效的单元测试类AppTest&#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置" />
   </component>
 </project>

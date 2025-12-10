@@ -1,0 +1,110 @@
+package com.notary.repository;
+
+import com.notary.model.entity.UserKeyVault;
+import com.notary.config.DatabaseConfig;
+import java.sql.*;
+import java.util.Optional;
+import javax.sql.DataSource;
+
+public class UserKeyRepository {
+
+    private final DataSource dataSource;
+
+    public UserKeyRepository() {
+        this.dataSource = DatabaseConfig.getDataSource();
+    }
+
+    public boolean existsById(String userId) {
+        String sql = "SELECT COUNT(*) FROM notary_vault WHERE user_id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+            return false;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error while checking user existence", e);
+        }
+    }
+
+    public Optional<UserKeyVault> findById(String userId) {
+        String sql = "SELECT * FROM notary_vault WHERE user_id = ? AND status = 'ACTIVE'";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                UserKeyVault vault = new UserKeyVault();
+                vault.setUserId(rs.getString("user_id"));
+                vault.setHmacSeedEncrypted(rs.getBytes("hmac_seed_encrypted"));
+                vault.setSigningPrivKeyEncrypted(rs.getBytes("signing_priv_key_encrypted"));
+                vault.setPubKeyFingerprint(rs.getString("pub_key_fingerprint"));
+                vault.setStatus(rs.getString("status"));
+                vault.setCreatedAt(rs.getTimestamp("created_at").toInstant());
+
+                return Optional.of(vault);
+            }
+            return Optional.empty();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error while fetching user vault", e);
+        }
+    }
+
+    public void saveUserVault(String userId, byte[] hmacSeedEncrypted,
+                              byte[] signingPrivKeyEncrypted, String pubKeyFingerprint) {
+        String sql = """
+            INSERT INTO notary_vault 
+            (user_id, hmac_seed_encrypted, signing_priv_key_encrypted, pub_key_fingerprint, status) 
+            VALUES (?, ?, ?, ?, 'ACTIVE')
+            ON CONFLICT (user_id) DO NOTHING
+            """;
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            conn.setAutoCommit(false);
+
+            stmt.setString(1, userId);
+            stmt.setBytes(2, hmacSeedEncrypted);
+            stmt.setBytes(3, signingPrivKeyEncrypted);
+            stmt.setString(4, pubKeyFingerprint);
+
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating user vault failed, possibly due to duplicate user_id");
+            }
+
+            conn.commit();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to save user vault", e);
+        }
+    }
+
+    public void updateStatus(String userId, String status) {
+        String sql = "UPDATE notary_vault SET status = ? WHERE user_id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, status);
+            stmt.setString(2, userId);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update user status", e);
+        }
+    }
+}

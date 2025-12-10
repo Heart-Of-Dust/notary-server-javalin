@@ -58,4 +58,4 @@ public class AppConfig {
     public long getIdleTimeout() { return 600000; }
     public long getMaxLifetime() { return 1800000; }
 }
-}
+

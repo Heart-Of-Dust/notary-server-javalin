@@ -44,7 +44,7 @@
       <version>${postgresql.version}</version>
     </dependency>
 
-    <!-- Connection Pool -->
+    <!-- Connection Pool (只保留一个，移除重复的 5.1.0 版本) -->
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
@@ -79,11 +79,8 @@
       <version>5.9.3</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.zaxxer</groupId>
-      <artifactId>HikariCP</artifactId>
-      <version>5.1.0</version>
-    </dependency>
+
+    <!-- 注意：这里移除了重复的 HikariCP 5.1.0 依赖 -->
   </dependencies>
 
   <build>
@@ -104,6 +101,17 @@
                   <mainClass>com.notary.service.NotaryApplication</mainClass>
                 </transformer>
               </transformers>
+              <!-- 添加资源排除配置 -->
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
         </executions>

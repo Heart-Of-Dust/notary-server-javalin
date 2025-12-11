@@ -3,6 +3,9 @@ package com.notary.controller;
 // REST API控制器
 
 import com.notary.config.AppConfig;
+import com.notary.model.request.SeedChangeRequest;
+import com.notary.model.request.SeedRecoveryRequest;
+import com.notary.model.response.SeedRecoveryResponse;
 import com.notary.security.EphemeralKeyService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -46,7 +49,10 @@ public class NotaryController {
         app.post("/api/v1/register", controller::handleRegister);
         app.post("/api/v1/sign", controller::handleSign);
         app.get("/api/v1/registration-public-key", controller::handleGetRegistrationPublicKey);
-    }
+        // 新增seed管理路由
+        app.post("/api/v1/seed/recover", controller::handleSeedRecovery);
+        app.post("/api/v1/seed/change", controller::handleSeedChange);
+        }
 
     // 处理注册请求
     public void handleRegister(Context ctx) {
@@ -142,6 +148,52 @@ public class NotaryController {
             ctx.status(500).json(
                     Map.of("error", "Failed to get public key", "status", "error")
             );
+        }
+    }
+    // 处理seed恢复请求
+    public void handleSeedRecovery(Context ctx) {
+        try {
+            SeedRecoveryRequest request = ctx.bodyAsClass(SeedRecoveryRequest.class);
+
+            // 验证请求参数
+            if (request.getUserId() == null || request.getAuthProof() == null || request.getClientPubKey() == null) {
+                throw new NotaryException("Missing required fields for seed recovery", 400);
+            }
+
+            SeedRecoveryResponse response = keyService.recoverSeed(
+                    request.getUserId(),
+                    request.getAuthProof(),
+                    request.getClientPubKey()
+            );
+
+            ctx.status(200).json(response);
+        } catch (NotaryException e) {
+            ctx.status(e.getStatusCode()).json(Map.of("error", e.getMessage(), "status", "error"));
+        } catch (Exception e) {
+            ctx.status(500).json(Map.of("error", "Seed recovery failed", "status", "error"));
+        }
+    }
+
+    // 处理seed更换请求
+    public void handleSeedChange(Context ctx) {
+        try {
+            SeedChangeRequest request = ctx.bodyAsClass(SeedChangeRequest.class);
+
+            if (request.getUserId() == null || request.getOldAuthCode() == null || request.getNewEncryptedSeed() == null) {
+                throw new NotaryException("Missing required fields for seed change", 400);
+            }
+
+            Map<String, String> response = keyService.changeSeed(
+                    request.getUserId(),
+                    request.getOldAuthCode(),
+                    request.getNewEncryptedSeed()
+            );
+
+            ctx.status(200).json(response);
+        } catch (NotaryException e) {
+            ctx.status(e.getStatusCode()).json(Map.of("error", e.getMessage(), "status", "error"));
+        } catch (Exception e) {
+            ctx.status(500).json(Map.of("error", "Seed change failed", "status", "error"));
         }
     }
 }

@@ -46,3 +46,10 @@ CREATE TABLE IF NOT EXISTS key_revocation_list (
 
 CREATE INDEX IF NOT EXISTS idx_revocation_fingerprint ON key_revocation_list(pub_key_fingerprint);
 CREATE INDEX IF NOT EXISTS idx_revocation_timestamp ON key_revocation_list(revoked_at);
+
+-- 修改notary_vault表，添加更新时间字段
+ALTER TABLE IF EXISTS notary_vault
+    ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP;
+
+-- 为更新时间添加索引（可选）
+CREATE INDEX IF NOT EXISTS idx_notary_vault_updated_at ON notary_vault(updated_at);

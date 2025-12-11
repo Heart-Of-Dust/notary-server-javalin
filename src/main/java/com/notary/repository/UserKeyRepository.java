@@ -107,4 +107,32 @@ public class UserKeyRepository {
             throw new RuntimeException("Failed to update user status", e);
         }
     }
+
+    /**
+     * 更新用户的HMAC种子（k_seed）
+     */
+    public void updateHmacSeed(String userId, byte[] newHmacSeedEncrypted) {
+        String sql = "UPDATE notary_vault " +
+                "SET hmac_seed_encrypted = ?, updated_at = CURRENT_TIMESTAMP " + // 注意：需先在表中添加updated_at字段
+                "WHERE user_id = ? AND status = 'ACTIVE'";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            conn.setAutoCommit(false);
+
+            stmt.setBytes(1, newHmacSeedEncrypted);
+            stmt.setString(2, userId);
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Update HMAC seed failed: user not found or inactive");
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update HMAC seed", e);
+        }
+    }
+
 }

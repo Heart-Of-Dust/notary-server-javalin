@@ -4,6 +4,7 @@ import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.*;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.nio.charset.StandardCharsets;
 
@@ -125,5 +126,50 @@ public class CryptoService {
                     + Character.digit(s.charAt(i+1), 16));
         }
         return data;
+    }
+
+    // 用公钥加密数据（供客户端加密新seed使用）
+    public byte[] encryptWithPublicKey(PublicKey publicKey, byte[] data) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            return cipher.doFinal(data);
+        } catch (Exception e) {
+            throw new RuntimeException("Public key encryption failed", e);
+        }
+    }
+
+    // 验证签名（用于身份验证）
+    public boolean verifySignature(PublicKey publicKey, byte[] data, byte[] signature) {
+        try {
+            Signature verifier = Signature.getInstance("Ed25519");
+            verifier.initVerify(publicKey);
+            verifier.update(data);
+            return verifier.verify(signature);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // 验证HMAC（用于旧seed验证）
+    public boolean verifyHmac(byte[] key, byte[] data, byte[] hmac) {
+        try {
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec keySpec = new SecretKeySpec(key, "HmacSHA256");
+            mac.init(keySpec);
+            byte[] computedHmac = mac.doFinal(data);
+            return MessageDigest.isEqual(computedHmac, hmac);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    /**
+     * 从 Base64 编码字符串解析公钥（支持 Ed25519 算法）
+     */
+    public PublicKey decodePublicKey(String publicKeyBase64) throws Exception {
+        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyBase64);
+        // Ed25519 公钥无需额外格式包装，直接使用密钥工厂生成
+        KeyFactory keyFactory = KeyFactory.getInstance("Ed25519");
+        return keyFactory.generatePublic(new X509EncodedKeySpec(publicKeyBytes));
     }
 }

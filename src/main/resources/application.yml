@@ -57,12 +57,14 @@ redis:
 
 logging:
   level:
-    com.notary: DEBUG
+    com.notary: INFO
+    com.notary.interceptor.RequestLoggingInterceptor: INFO
     org.hibernate.SQL: WARN
     org.hibernate.type: WARN
+    io.javalin: INFO
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %highlight(%-5level) - %cyan(%logger{36}) - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} - %-5level - %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} - %highlight(%-5level) - %cyan(%logger{20}) - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} - %-5level - %logger{20} - %msg%n"
   file:
     name: "logs/notary-service.log"
     maxHistory: 30

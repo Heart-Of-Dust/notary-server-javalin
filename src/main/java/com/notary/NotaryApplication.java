@@ -6,6 +6,7 @@ import com.notary.config.AppConfig;
 import com.notary.controller.NotaryController;
 import com.notary.controller.HealthController;
 import com.notary.exception.ExceptionHandler;
+import com.notary.interceptor.RequestLoggingInterceptor;
 
 public class NotaryApplication {
     public static void main(String[] args) {
@@ -18,6 +19,11 @@ public class NotaryApplication {
             cfg.http.defaultContentType = "application/json";
             cfg.showJavalinBanner = false;
         });
+
+        // 注册请求日志拦截器
+        app.before(RequestLoggingInterceptor::logRequest);
+        app.after(RequestLoggingInterceptor::logResponse);
+        app.exception(Exception.class, (e, ctx) -> RequestLoggingInterceptor.logException(ctx, e));
 
         // 注册路由
         NotaryController.registerRoutes(app);

@@ -16,6 +16,7 @@ public class AppConfig {
     private int tsaMaxAgeSeconds = 300;
 
     private static AppConfig instance;
+    private Duration ephemeralKeyRotationInterval = Duration.ofDays(3);
 
     private AppConfig() {
         this.serverPort = Integer.parseInt(
@@ -37,6 +38,10 @@ public class AppConfig {
             instance = new AppConfig();
         }
         return instance;
+    }
+
+    public Duration getEphemeralKeyRotationInterval() {
+        return ephemeralKeyRotationInterval;
     }
 
     // Getter方法 - 必须添加Redis密码的getter

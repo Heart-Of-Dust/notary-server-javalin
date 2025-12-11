@@ -1,82 +1,112 @@
 package com.notary.service;
 
-// 密钥管理服务
-
 import com.notary.model.response.RegisterResponse;
 import com.notary.repository.UserKeyRepository;
 import com.notary.security.CryptoService;
+import com.notary.security.EphemeralKeyService;
 import com.notary.security.HsmService;
 import com.notary.exception.NotaryException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/**
+ * 密钥管理服务（用户注册、密钥生成与存储）
+ */
 public class KeyManagementService {
+    // 添加日志组件，方便排查问题
+    private static final Logger log = LoggerFactory.getLogger(KeyManagementService.class);
 
+    private final EphemeralKeyService ephemeralKeyService;
     private final UserKeyRepository userRepo;
     private final CryptoService cryptoService;
     private final HsmService hsmService;
 
-    public KeyManagementService() {
-        this.userRepo = new UserKeyRepository();
-        this.cryptoService = new CryptoService();
-        this.hsmService = new HsmService();
+    // 优化：推荐通过构造方法注入所有依赖（而非硬new），便于测试和扩展
+    public KeyManagementService(EphemeralKeyService ephemeralKeyService,
+                                UserKeyRepository userRepo,
+                                CryptoService cryptoService,
+                                HsmService hsmService) {
+        this.ephemeralKeyService = ephemeralKeyService;
+        this.userRepo = userRepo;
+        this.cryptoService = cryptoService;
+        this.hsmService = hsmService;
+    }
+
+    // 兼容原有构造方法（可选，避免调用方改造）
+    public KeyManagementService(EphemeralKeyService ephemeralKeyService) {
+        this(ephemeralKeyService,
+                new UserKeyRepository(),
+                new CryptoService(),
+                new HsmService());
     }
 
     public RegisterResponse registerUser(String userId, String encryptedPayload) {
-        // WORM检查：用户是否已存在
+        // 1. WORM检查：用户是否已存在
         if (userRepo.existsById(userId)) {
+            log.warn("User {} already registered (WORM check failed)", userId);
             throw new NotaryException("User already registered", 409);
         }
 
         try {
-            // 1. 解密payload
+            // 2. 解密payload（使用动态私钥）
+            log.info("Start decrypting payload for user: {}", userId);
             byte[] encryptedBytes = Base64.getDecoder().decode(encryptedPayload);
-            byte[] decrypted = cryptoService.decryptWithRootKey(encryptedBytes);
+            byte[] decrypted;
+            try {
+                decrypted = ephemeralKeyService.decrypt(encryptedBytes);
+            } catch (Exception e) {
+                log.error("Failed to decrypt payload for user {}: {}", userId, e.getMessage(), e);
+                throw new NotaryException("Payload decryption failed (invalid key or data)", 400);
+            }
 
-            // 解析payload（假设格式为 UserID|ClientSeedKey）
-            String[] parts = new String(decrypted).split("\\|");
+            // 3. 解析payload（指定UTF-8编码，避免乱码）
+            String payload = new String(decrypted, StandardCharsets.UTF_8);
+            String[] parts = payload.split("\\|");
             if (parts.length != 2) {
-                throw new NotaryException("Invalid payload format", 400);
+                log.error("Invalid payload format for user {}: {}", userId, payload);
+                throw new NotaryException("Invalid payload format (expected: UserID|ClientSeedKey)", 400);
             }
 
             String extractedUserId = parts[0];
             String clientSeedKey = parts[1];
 
-            // 验证UserID一致性
+            // 4. 验证UserID一致性
             if (!userId.equals(extractedUserId)) {
-                throw new NotaryException("UserID mismatch", 400);
+                log.warn("UserID mismatch for {}: extracted={}", userId, extractedUserId);
+                throw new NotaryException("UserID mismatch in payload", 400);
             }
 
-            // 2. 生成Ed25519密钥对
+            // 5. 生成用户永久Ed25519密钥对
             var keyPair = cryptoService.generateEd25519KeyPair();
             byte[] publicKey = keyPair.getPublic().getEncoded();
             byte[] privateKey = keyPair.getPrivate().getEncoded();
 
-            // 3. 加密存储
-            byte[] encryptedSeed = cryptoService.encryptWithMasterKey(
-                    clientSeedKey.getBytes()
-            );
-            byte[] encryptedPrivateKey = cryptoService.encryptWithMasterKey(
-                    privateKey
-            );
+            // 6. 加密存储种子和私钥
+            byte[] encryptedSeed = cryptoService.encryptWithMasterKey(clientSeedKey.getBytes(StandardCharsets.UTF_8));
+            byte[] encryptedPrivateKey = cryptoService.encryptWithMasterKey(privateKey);
 
-            // 4. 计算公钥指纹
+            // 7. 计算公钥指纹
             String fingerprint = cryptoService.calculateFingerprint(publicKey);
 
-            // 5. 保存到数据库
-            userRepo.saveUserVault(userId, encryptedSeed,
-                    encryptedPrivateKey, fingerprint);
+            // 8. 保存到数据库
+            userRepo.saveUserVault(userId, encryptedSeed, encryptedPrivateKey, fingerprint);
+            log.info("User {} registered successfully, fingerprint: {}", userId, fingerprint);
 
-            // 6. 生成根签名背书
+            // 9. 生成根签名背书
             byte[] endorsement = hsmService.signWithRootKey(
-                    (userId + Base64.getEncoder().encodeToString(publicKey)).getBytes()
+                    (userId + Base64.getEncoder().encodeToString(publicKey)).getBytes(StandardCharsets.UTF_8)
             );
 
-            // 7. 生成客户端回执
+            // 10. 生成客户端回执
             String receiptData = userId + clientSeedKey;
             byte[] receipt = hsmService.signWithRootKey(
-                    cryptoService.hash(receiptData.getBytes())
+                    cryptoService.hash(receiptData.getBytes(StandardCharsets.UTF_8))
             );
 
+            // 11. 返回响应
             return new RegisterResponse(
                     "success",
                     Base64.getEncoder().encodeToString(publicKey),
@@ -84,8 +114,13 @@ public class KeyManagementService {
                     Base64.getEncoder().encodeToString(receipt)
             );
 
+        } catch (NotaryException e) {
+            // 已知业务异常，直接抛出
+            throw e;
         } catch (Exception e) {
-            throw new NotaryException("Registration failed: " + e.getMessage(), 500);
+            // 未知异常，记录日志并返回通用错误
+            log.error("Unexpected error during registration for user {}: {}", userId, e.getMessage(), e);
+            throw new NotaryException("Registration failed: internal server error", 500);
         }
     }
 }

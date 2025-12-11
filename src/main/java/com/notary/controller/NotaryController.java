@@ -2,6 +2,8 @@ package com.notary.controller;
 
 // REST API控制器
 
+import com.notary.config.AppConfig;
+import com.notary.security.EphemeralKeyService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import com.notary.model.request.RegisterRequest;
@@ -9,28 +11,41 @@ import com.notary.model.request.SignRequest;
 import com.notary.service.KeyManagementService;
 import com.notary.service.SigningService;
 import com.notary.exception.NotaryException;
-
+import java.time.Duration;
 import java.util.Map;
 
 public class NotaryController {
 
     private final KeyManagementService keyService;
     private final SigningService signingService;
+    private final EphemeralKeyService ephemeralKeyService; // 新增：动态密钥服务
+    private final Duration rotationInterval; // 新增：密钥轮换周期
 
     public NotaryController(KeyManagementService keyService,
-                            SigningService signingService) {
+                            SigningService signingService,
+                            EphemeralKeyService ephemeralKeyService,
+                            Duration rotationInterval) {
         this.keyService = keyService;
         this.signingService = signingService;
+        this.ephemeralKeyService = ephemeralKeyService;
+        this.rotationInterval = rotationInterval;
     }
-
     public static void registerRoutes(Javalin app) {
+        // 初始化动态密钥服务（从配置获取轮换周期）
+        Duration rotationInterval = AppConfig.load().getEphemeralKeyRotationInterval();
+        EphemeralKeyService ephemeralKeyService = new EphemeralKeyService(rotationInterval);
+
+        // 初始化服务时注入动态密钥服务
         NotaryController controller = new NotaryController(
-                new KeyManagementService(),
-                new SigningService()
+                new KeyManagementService(ephemeralKeyService), // 注入到密钥管理服务
+                new SigningService(),
+                ephemeralKeyService, // 传入控制器
+                rotationInterval
         );
 
         app.post("/api/v1/register", controller::handleRegister);
         app.post("/api/v1/sign", controller::handleSign);
+        app.get("/api/v1/registration-public-key", controller::handleGetRegistrationPublicKey);
     }
 
     // 处理注册请求
@@ -111,6 +126,21 @@ public class NotaryController {
         } catch (Exception e) {
             ctx.status(500).json(
                     Map.of("error", "Internal server error", "status", "error")
+            );
+        }
+    }
+    public void handleGetRegistrationPublicKey(Context ctx) {
+        try {
+            String publicKey = ephemeralKeyService.getCurrentPublicKeyBase64();
+
+            ctx.status(200).json(Map.of(
+                    "public_key", publicKey,
+                    "expires_in", rotationInterval.toSeconds(),
+                    "algorithm", "RSA-OAEP"
+            ));
+        } catch (Exception e) {
+            ctx.status(500).json(
+                    Map.of("error", "Failed to get public key", "status", "error")
             );
         }
     }

@@ -1,5 +1,3 @@
--- 创建扩展（如果需要）
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- 创建密钥保险箱表
 CREATE TABLE IF NOT EXISTS notary_vault (
@@ -18,8 +16,8 @@ CREATE INDEX IF NOT EXISTS idx_notary_vault_fingerprint ON notary_vault(pub_key_
 
 -- 创建审计表（可选）
 CREATE TABLE IF NOT EXISTS notary_audit_log (
-                                                id BIGSERIAL PRIMARY KEY,
-                                                user_id VARCHAR(64),
+    id BIGSERIAL PRIMARY KEY,
+    user_id VARCHAR(64),
     action_type VARCHAR(50) NOT NULL,
     action_timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     ip_address INET,

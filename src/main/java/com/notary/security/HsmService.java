@@ -6,6 +6,7 @@ import java.util.Base64;
 public class HsmService {
 
     private PrivateKey rootPrivateKey;
+    private PublicKey rootPublicKey;
 
     public HsmService() {
         // 实际应该从HSM加载，这里简化为从环境变量或配置文件加载
@@ -23,9 +24,13 @@ public class HsmService {
             // 实际应该使用HSM API加载密钥
             // 这里简化为生成一个新密钥（仅用于演示）
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("Ed25519");
-            keyGen.initialize(256);
             KeyPair keyPair = keyGen.generateKeyPair();
             this.rootPrivateKey = keyPair.getPrivate();
+            this.rootPublicKey = keyPair.getPublic();
+            // 实际应该使用HSM API保存密钥
+            System.out.println("HSM根密钥对生成成功");
+            System.out.println("私钥算法: " + rootPrivateKey.getAlgorithm());
+            System.out.println("公钥算法: " + rootPublicKey.getAlgorithm());
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize HSM service", e);
@@ -38,7 +43,11 @@ public class HsmService {
             Signature signature = Signature.getInstance("Ed25519");
             signature.initSign(rootPrivateKey);
             signature.update(data);
-            return signature.sign();
+            byte[] signedData = signature.sign();
+
+            System.out.println("根密钥签名成功，数据长度: " + data.length +
+                    ", 签名长度: " + signedData.length);
+            return signedData;
 
         } catch (Exception e) {
             throw new RuntimeException("HSM signing failed", e);
@@ -50,7 +59,6 @@ public class HsmService {
             // 实际应该调用HSM硬件进行签名
             // 这里简化为软件签名（仅用于演示）
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("Ed25519");
-            keyGen.initialize(256, new SecureRandom());
             KeyPair tempKeyPair = keyGen.generateKeyPair();
 
             Signature signature = Signature.getInstance("Ed25519");

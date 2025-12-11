@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖  &#10;style: 调整workspace.xml中的自动重载类型设置  &#10;refactor: 移除无效的单元测试类AppTest  &#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/config/AppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/controller/HealthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/controller/HealthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/security/CryptoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/security/CryptoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/security/HsmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/security/HsmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/service/TsaValidationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/service/TsaValidationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/init.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,28 +51,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "F:/program/javacode/notary-server-javalin",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDK",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.build.tools.auto.reload": "ALL",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/program/javacode/notary-server-javalin&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDK&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.build.tools.auto.reload&quot;: &quot;ALL&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
+    <configuration name="NotaryApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.notary.NotaryApplication" />
+      <module name="trustless-notary-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.notary.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
@@ -78,6 +97,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="应用程序.NotaryApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -90,7 +114,9 @@
       <workItem from="1765357288961" duration="13713000" />
       <workItem from="1765375121474" duration="40000" />
       <workItem from="1765375169328" duration="86000" />
-      <workItem from="1765375279246" duration="351000" />
+      <workItem from="1765375279246" duration="968000" />
+      <workItem from="1765436779384" duration="3978000" />
+      <workItem from="1765444027922" duration="5627000" />
     </task>
     <task id="LOCAL-00001" summary="feat(core): 新增核心配置与安全服务代码">
       <option name="closed" value="true" />
@@ -108,7 +134,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765374734210</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖  &#10;style: 调整workspace.xml中的自动重载类型设置  &#10;refactor: 移除无效的单元测试类AppTest  &#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置">
+      <option name="closed" value="true" />
+      <created>1765375707399</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1765375707399</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,6 +151,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat(core): 新增核心配置与安全服务代码" />
     <MESSAGE value="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖&#10;style: 调整workspace.xml中的自动重载类型设置&#10;refactor: 移除无效的单元测试类AppTest&#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖&#10;style: 调整workspace.xml中的自动重载类型设置&#10;refactor: 移除无效的单元测试类AppTest&#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置" />
+    <MESSAGE value="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖  &#10;style: 调整workspace.xml中的自动重载类型设置  &#10;refactor: 移除无效的单元测试类AppTest  &#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖  &#10;style: 调整workspace.xml中的自动重载类型设置  &#10;refactor: 移除无效的单元测试类AppTest  &#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置" />
   </component>
 </project>

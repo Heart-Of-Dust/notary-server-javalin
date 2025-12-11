@@ -23,8 +23,8 @@ public class AppConfig {
         );
         this.dbUrl = System.getenv().getOrDefault("DB_URL",
                 "jdbc:postgresql://localhost:5432/notary_db");
-        this.dbUser = System.getenv().getOrDefault("DB_USER", "notary_admin");
-        this.dbPassword = System.getenv().getOrDefault("DB_PASSWORD", "");
+        this.dbUser = System.getenv().getOrDefault("DB_USER", "notary_user");
+        this.dbPassword = System.getenv().getOrDefault("DB_PASSWORD", "123456");
         this.redisHost = System.getenv().getOrDefault("REDIS_HOST", "localhost");
         this.redisPort = Integer.parseInt(
                 System.getenv().getOrDefault("REDIS_PORT", "6379")
@@ -50,12 +50,5 @@ public class AppConfig {
     public Duration getReplayTtl() { return replayTtl; }
     public int getTsaToleranceSeconds() { return tsaToleranceSeconds; }
     public int getTsaMaxAgeSeconds() { return tsaMaxAgeSeconds; }
-
-    // 还可以添加连接池配置的方法
-    public int getMaxPoolSize() { return 20; }
-    public int getMinIdle() { return 5; }
-    public long getConnectionTimeout() { return 30000; }
-    public long getIdleTimeout() { return 600000; }
-    public long getMaxLifetime() { return 1800000; }
 }
 

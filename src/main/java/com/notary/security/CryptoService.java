@@ -18,10 +18,10 @@ public class CryptoService {
     private final SecureRandom secureRandom;
 
     public CryptoService() {
-        // 实际应该从KMS/HSM获取，这里简化为从环境变量读取
+
         String masterKeyBase64 = System.getenv().getOrDefault(
                 "MASTER_KEY_BASE64",
-                "mF5nX9pLq2sR8wT3zY6vK1cB7dE0gH4j=" // 示例密钥，生产环境必须更换
+                "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
         );
         this.masterKey = Base64.getDecoder().decode(masterKeyBase64);
         this.secureRandom = new SecureRandom();

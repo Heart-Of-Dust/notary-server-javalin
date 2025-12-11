@@ -30,7 +30,7 @@ public class HealthController {
         Map<String, Object> response = Map.of(
                 "status", "UP",
                 "service", "Distributed Trustless Notary Service",
-                "version", "1.1.3",
+                "version", "0.1.0",
                 "timestamp", System.currentTimeMillis()
         );
 
@@ -64,7 +64,7 @@ public class HealthController {
         Map<String, Object> response = Map.of(
                 "status", "UP",
                 "service", "Distributed Trustless Notary Service",
-                "version", "1.1.3",
+                "version", "0.1.0",
                 "build", "2025-12-10",
                 "environment", System.getenv().getOrDefault("NOTARY_ENV", "development"),
                 "system", Map.of(

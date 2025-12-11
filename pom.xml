@@ -29,6 +29,13 @@
       <artifactId>javalin</artifactId>
       <version>${javalin.version}</version>
     </dependency>
+    
+    <!-- Javalin CORS Plugin -->
+    <dependency>
+      <groupId>io.javalin</groupId>
+      <artifactId>javalin-bundle</artifactId>
+      <version>${javalin.version}</version>
+    </dependency>
 
     <!-- JSON Processing -->
     <dependency>
@@ -107,7 +114,7 @@
             <configuration>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.notary.service.NotaryApplication</mainClass>
+                  <mainClass>com.notary.NotaryApplication</mainClass>
                 </transformer>
               </transformers>
               <!-- 添加资源排除配置 -->

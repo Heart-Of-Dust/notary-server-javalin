@@ -10,6 +10,7 @@ import org.bouncycastle.tsp.TimeStampToken;
 import org.bouncycastle.tsp.TimeStampTokenInfo;
 
 import java.security.MessageDigest;
+import java.security.cert.X509Certificate;
 import java.nio.ByteBuffer;
 import java.util.Base64;
 
@@ -20,11 +21,15 @@ public class TsaValidationService {
                               String msgHash, long clientTsMs) {
         try {
             byte[] tokenBytes = Base64.getDecoder().decode(tsaTokenBase64);
-            TimeStampToken tsToken = new TimeStampToken(new CMSSignedData(tokenBytes));
+            CMSSignedData signedData = new CMSSignedData(tokenBytes);
+            TimeStampToken tsToken = new TimeStampToken(signedData);
 
             /* ---------- 正确验证签名 ---------- */
-            SignerInformation signerInfo = tsToken.toSignerInformation();
+            SignerInformation signerInfo = tsToken.toCMSSignedData().getSignerInfos().getSigners().iterator().next();
             JcaSimpleSignerInfoVerifierBuilder builder = new JcaSimpleSignerInfoVerifierBuilder();
+            
+            // 获取TSA证书 - 从CMSSignedData中获取证书集合
+            X509Certificate tsaCert = (X509Certificate) tsToken.toCMSSignedData().getCertificates().getMatches(signerInfo.getSID()).iterator().next();
             SignerInformationVerifier verifier = builder.build(tsaCert);
             signerInfo.verify(verifier);
 

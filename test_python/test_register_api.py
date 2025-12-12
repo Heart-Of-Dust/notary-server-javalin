@@ -99,8 +99,8 @@ def main():
     print("=== API 注册测试 ===")
     
     # 测试参数
-    user_id = "test_user_001"
-    client_seed_key = "my_secret_seed_key_12345"
+    user_id = "100000"
+    client_seed_key = "my_secret_seed_key_123485"
     
     print(f"测试用户ID: {user_id}")
     print(f"客户端种子密钥: {client_seed_key}")

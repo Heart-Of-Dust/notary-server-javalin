@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="feat(security): 新增公钥加密和签名验证功能，优化seed管理流程">
-      <change afterPath="$PROJECT_DIR$/.idea/MarsCodeWorkspaceAppSettings.xml" afterDir="false" />
+    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="feat(security): 添加AES密钥初始化和加密解密功能">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/repository/UserKeyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/repository/UserKeyRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/security/CryptoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/security/CryptoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/security/HsmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/security/HsmService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_python/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_python/simple_register_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/simple_register_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_python/test_register_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/test_register_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_python/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/uv.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +124,10 @@
       <workItem from="1765505106974" duration="387000" />
       <workItem from="1765505508576" duration="2098000" />
       <workItem from="1765507804833" duration="153000" />
-      <workItem from="1765507972001" duration="4770000" />
+      <workItem from="1765507972001" duration="10783000" />
+      <workItem from="1765518784338" duration="113000" />
+      <workItem from="1765519539836" duration="626000" />
+      <workItem from="1765520325463" duration="3741000" />
     </task>
     <task id="LOCAL-00001" summary="feat(core): 新增核心配置与安全服务代码">
       <option name="closed" value="true" />
@@ -175,11 +177,38 @@
       <option name="project" value="LOCAL" />
       <updated>1765471762716</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="feat(security): 新增HSM密钥存储配置及公钥加密、签名验证功，使用注意事项：软件模拟HSM功能。">
+      <option name="closed" value="true" />
+      <created>1765512964591</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1765512964591</updated>
+    </task>
+    <task id="LOCAL-00008" summary="feat(security): 添加AES密钥初始化和加密解密功能">
+      <option name="closed" value="true" />
+      <created>1765518333636</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1765518333636</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat(core): 新增核心配置与安全服务代码" />
@@ -188,6 +217,43 @@
     <MESSAGE value="fix: 修正配置中的数据库用户和密码" />
     <MESSAGE value="feat(security): 新增临时密钥服务并优化注册流程" />
     <MESSAGE value="feat(security): 新增公钥加密和签名验证功能，优化seed管理流程" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(security): 新增公钥加密和签名验证功能，优化seed管理流程" />
+    <MESSAGE value="feat(security): 新增HSM密钥存储配置及公钥加密、签名验证功，使用注意事项：软件模拟HSM功能。" />
+    <MESSAGE value="feat(security): 添加AES密钥初始化和加密解密功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(security): 添加AES密钥初始化和加密解密功能" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java</url>
+          <line>54</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java</url>
+          <line>55</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/notary/controller/NotaryController.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java</url>
+          <line>51</line>
+          <properties class="com.notary.service.KeyManagementService" method="registerUser">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.notary.service.KeyManagementService" memberName="userRepo" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

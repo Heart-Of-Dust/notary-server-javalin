@@ -4,19 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="feat(security): 新增临时密钥服务并优化注册流程">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/notary/model/request/SeedChangeRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/notary/model/request/SeedRecoveryRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/notary/model/response/SeedRecoveryResponse.java" afterDir="false" />
+    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="feat(security): 新增公钥加密和签名验证功能，优化seed管理流程">
+      <change afterPath="$PROJECT_DIR$/.idea/MarsCodeWorkspaceAppSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/controller/NotaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/controller/NotaryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/repository/UserKeyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/repository/UserKeyRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/security/CryptoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/security/CryptoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/init.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/security/HsmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/security/HsmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,8 +66,13 @@
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.build.tools.auto.reload&quot;: &quot;ALL&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ]
   }
 }</component>
   <component name="RunManager">
@@ -121,7 +121,11 @@
       <workItem from="1765436779384" duration="3978000" />
       <workItem from="1765444027922" duration="5627000" />
       <workItem from="1765451644028" duration="769000" />
-      <workItem from="1765463770862" duration="7136000" />
+      <workItem from="1765463770862" duration="11966000" />
+      <workItem from="1765505106974" duration="387000" />
+      <workItem from="1765505508576" duration="2098000" />
+      <workItem from="1765507804833" duration="153000" />
+      <workItem from="1765507972001" duration="4770000" />
     </task>
     <task id="LOCAL-00001" summary="feat(core): 新增核心配置与安全服务代码">
       <option name="closed" value="true" />
@@ -163,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765467191806</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat(security): 新增公钥加密和签名验证功能，优化seed管理流程">
+      <option name="closed" value="true" />
+      <created>1765471762716</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1765471762716</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,6 +187,7 @@
     <MESSAGE value="fix: 修正AppConfig.java中的多余右括号并移除重复的HikariCP依赖  &#10;style: 调整workspace.xml中的自动重载类型设置  &#10;refactor: 移除无效的单元测试类AppTest  &#10;chore: 更新pom.xml中的Maven导入偏好设置和workspace.xml中的项目结构配置" />
     <MESSAGE value="fix: 修正配置中的数据库用户和密码" />
     <MESSAGE value="feat(security): 新增临时密钥服务并优化注册流程" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(security): 新增临时密钥服务并优化注册流程" />
+    <MESSAGE value="feat(security): 新增公钥加密和签名验证功能，优化seed管理流程" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(security): 新增公钥加密和签名验证功能，优化seed管理流程" />
   </component>
 </project>

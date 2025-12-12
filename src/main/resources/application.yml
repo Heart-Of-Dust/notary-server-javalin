@@ -25,6 +25,9 @@ security:
     provider: "SunPKCS11"
     config: ${HSM_CONFIG_PATH:/etc/hsm/config.cfg}
     pin: ${HSM_PIN:}
+    keyStorage:
+      path: ${HSM_KEY_PATH:./hsm_keys}  # 密钥存储路径
+      backupPath: ${HSM_BACKUP_PATH:./hsm_backups}  # 备份路径
   tsa:
     rootCert: "classpath:certs/tsa_root.pem"
     allowedDriftMs: 90000    # 90秒
@@ -69,3 +72,8 @@ logging:
     name: "logs/notary-service.log"
     maxHistory: 30
     maxSize: 100MB
+
+    # HSM配置
+    hsm:
+      simulation: true  # 标记为模拟模式
+      rootKey: ${HSM_ROOT_PRIVATE_KEY:} # 可选：从环境变量加载根密钥

@@ -90,6 +90,7 @@
       <artifactId>bcmail-jdk18on</artifactId>
       <version>1.78.1</version>
     </dependency>
+
   </dependencies>
 
   <build>

@@ -15,16 +15,11 @@ public class CryptoService {
     private static final int GCM_TAG_LENGTH = 128;
     private static final int IV_LENGTH = 12; // 12 bytes for GCM
 
-    private final byte[] masterKey;
+    private final HsmService hsmService;
     private final SecureRandom secureRandom;
 
     public CryptoService() {
-
-        String masterKeyBase64 = System.getenv().getOrDefault(
-                "MASTER_KEY_BASE64",
-                "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
-        );
-        this.masterKey = Base64.getDecoder().decode(masterKeyBase64);
+        this.hsmService = new HsmService();
         this.secureRandom = new SecureRandom();
     }
 
@@ -37,17 +32,13 @@ public class CryptoService {
         byte[] iv = new byte[IV_LENGTH];
         secureRandom.nextBytes(iv);
 
-        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
-        GCMParameterSpec parameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
-        SecretKeySpec keySpec = new SecretKeySpec(masterKey, "AES");
-
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec, parameterSpec);
-        byte[] ciphertext = cipher.doFinal(plaintext);
+        // 使用HSM服务进行加密
+        byte[] encryptedData = hsmService.encryptWithRootKey(plaintext);
 
         // 组合 IV + 密文
-        byte[] encrypted = new byte[IV_LENGTH + ciphertext.length];
+        byte[] encrypted = new byte[IV_LENGTH + encryptedData.length];
         System.arraycopy(iv, 0, encrypted, 0, IV_LENGTH);
-        System.arraycopy(ciphertext, 0, encrypted, IV_LENGTH, ciphertext.length);
+        System.arraycopy(encryptedData, 0, encrypted, IV_LENGTH, encryptedData.length);
 
         return encrypted;
     }
@@ -63,17 +54,8 @@ public class CryptoService {
         System.arraycopy(encrypted, 0, iv, 0, IV_LENGTH);
         System.arraycopy(encrypted, IV_LENGTH, ciphertext, 0, ciphertext.length);
 
-        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
-        GCMParameterSpec parameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
-        SecretKeySpec keySpec = new SecretKeySpec(masterKey, "AES");
-
-        cipher.init(Cipher.DECRYPT_MODE, keySpec, parameterSpec);
-        return cipher.doFinal(ciphertext);
-    }
-
-    public byte[] decryptWithRootKey(byte[] encrypted) throws Exception {
-        // 实际应该使用HSM解密，这里简化为使用master key
-        return decryptWithMasterKey(encrypted);
+        // 使用HSM服务进行解密
+        return hsmService.decryptWithRootKey(ciphertext);
     }
 
     public String calculateHmac(byte[] key, byte[] data) throws Exception {
@@ -138,6 +120,7 @@ public class CryptoService {
             throw new RuntimeException("Public key encryption failed", e);
         }
     }
+
 
     // 验证签名（用于身份验证）
     public boolean verifySignature(PublicKey publicKey, byte[] data, byte[] signature) {

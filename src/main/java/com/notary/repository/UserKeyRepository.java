@@ -60,37 +60,36 @@ public class UserKeyRepository {
         }
     }
 
-    public void saveUserVault(String userId, byte[] hmacSeedEncrypted,
-                              byte[] signingPrivKeyEncrypted, String pubKeyFingerprint) {
-        String sql = """
-            INSERT INTO notary_vault 
-            (user_id, hmac_seed_encrypted, signing_priv_key_encrypted, pub_key_fingerprint, status) 
-            VALUES (?, ?, ?, ?, 'ACTIVE')
-            ON CONFLICT (user_id) DO NOTHING
-            """;
+    // 在 saveUserVault 方法中，需要添加事务级别的唯一性检查
+public void saveUserVault(String userId, byte[] hmacSeedEncrypted,
+                          byte[] signingPrivKeyEncrypted, String pubKeyFingerprint) {
+    String sql = """
+        INSERT INTO notary_vault 
+        (user_id, hmac_seed_encrypted, signing_priv_key_encrypted, pub_key_fingerprint, status) 
+        VALUES (?, ?, ?, ?, 'ACTIVE')
+        """;  // 移除了 ON CONFLICT DO NOTHING
 
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            conn.setAutoCommit(false);
+        conn.setAutoCommit(false);
 
-            stmt.setString(1, userId);
-            stmt.setBytes(2, hmacSeedEncrypted);
-            stmt.setBytes(3, signingPrivKeyEncrypted);
-            stmt.setString(4, pubKeyFingerprint);
+        stmt.setString(1, userId);
+        stmt.setBytes(2, hmacSeedEncrypted);
+        stmt.setBytes(3, signingPrivKeyEncrypted);
+        stmt.setString(4, pubKeyFingerprint);
 
-            int affectedRows = stmt.executeUpdate();
+        stmt.executeUpdate();
+        conn.commit();
 
-            if (affectedRows == 0) {
-                throw new SQLException("Creating user vault failed, possibly due to duplicate user_id");
-            }
-
-            conn.commit();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to save user vault", e);
+    } catch (SQLException e) {
+        if (e.getSQLState().equals("23505")) {  // 唯一性约束违反
+            throw new RuntimeException("User already exists (WORM violation)", e);
         }
+        throw new RuntimeException("Failed to save user vault", e);
     }
+}
+
 
     public void updateStatus(String userId, String status) {
         String sql = "UPDATE notary_vault SET status = ? WHERE user_id = ?";

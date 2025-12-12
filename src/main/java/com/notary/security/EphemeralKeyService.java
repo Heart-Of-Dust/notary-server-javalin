@@ -1,7 +1,10 @@
 package com.notary.security;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.OAEPParameterSpec;
+import javax.crypto.spec.PSource;
 import java.security.*;
+import java.security.spec.MGF1ParameterSpec;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.concurrent.Executors;
@@ -46,7 +49,13 @@ public class EphemeralKeyService {
     // 使用当前私钥解密
     public byte[] decrypt(byte[] encryptedData) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
-        cipher.init(Cipher.DECRYPT_MODE, currentKeyPair.getPrivate());
+        OAEPParameterSpec oaepParams = new OAEPParameterSpec(
+                "SHA-256",
+                "MGF1",
+                MGF1ParameterSpec.SHA256,
+                PSource.PSpecified.DEFAULT
+        );
+        cipher.init(Cipher.DECRYPT_MODE, currentKeyPair.getPrivate(), oaepParams);
         return cipher.doFinal(encryptedData);
     }
 

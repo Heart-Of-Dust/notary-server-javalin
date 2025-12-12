@@ -47,12 +47,14 @@ def build_encrypted_payload(user_id: str, client_seed_key: str, pem_public_key: 
         pem_public_key.encode("utf-8"), backend=default_backend()
     )
 
-    # RSA-OAEP 加密
+    # RSA-OAEP 加密 - 使用与Java端匹配的参数
     encrypted = public_key.encrypt(
         raw_payload.encode("utf-8"),
-        padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                     algorithm=hashes.SHA256(),
-                     label=None)
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
     )
     b64_encrypted = base64.b64encode(encrypted).decode("utf-8")
     print(f"加密后 payload (Base64): {b64_encrypted[:50]}...")

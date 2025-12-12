@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="feat(security): 添加AES密钥初始化和加密解密功能">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_python/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/security/EphemeralKeyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/security/EphemeralKeyService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_python/simple_register_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/simple_register_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_python/test_register_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/test_register_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_python/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/uv.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +124,7 @@
       <workItem from="1765507972001" duration="10783000" />
       <workItem from="1765518784338" duration="113000" />
       <workItem from="1765519539836" duration="626000" />
-      <workItem from="1765520325463" duration="3741000" />
+      <workItem from="1765520325463" duration="7703000" />
     </task>
     <task id="LOCAL-00001" summary="feat(core): 新增核心配置与安全服务代码">
       <option name="closed" value="true" />
@@ -193,7 +190,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765518333636</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="feat(security): 添加AES密钥初始化和加密解密功能">
+      <option name="closed" value="true" />
+      <created>1765524305544</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1765524305544</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

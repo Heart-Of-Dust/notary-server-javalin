@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="feat(security): 添加AES密钥初始化和加密解密功能">
+    <list default="true" id="db90f364-4df1-4dc8-9511-eaa5550cbe02" name="更改" comment="fix(security): 调整测试python代码的RSA-OAEP参数以匹配Java端">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/security/EphemeralKeyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/security/EphemeralKeyService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_python/simple_register_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_python/simple_register_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/controller/NotaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/controller/NotaryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/repository/UserKeyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/repository/UserKeyRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/notary/service/SigningService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/notary/service/SigningService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/init.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,32 +48,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/program/javacode/notary-server-javalin&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDK&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.build.tools.auto.reload&quot;: &quot;ALL&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "F:/program/javacode/notary-server-javalin",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDK",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.build.tools.auto.reload": "ALL",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="NotaryApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.notary.NotaryApplication" />
@@ -124,7 +127,8 @@
       <workItem from="1765507972001" duration="10783000" />
       <workItem from="1765518784338" duration="113000" />
       <workItem from="1765519539836" duration="626000" />
-      <workItem from="1765520325463" duration="7703000" />
+      <workItem from="1765520325463" duration="8042000" />
+      <workItem from="1765530540107" duration="5318000" />
     </task>
     <task id="LOCAL-00001" summary="feat(core): 新增核心配置与安全服务代码">
       <option name="closed" value="true" />
@@ -198,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765524305544</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fix(security): 调整测试python代码的RSA-OAEP参数以匹配Java端">
+      <option name="closed" value="true" />
+      <created>1765529659844</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1765529659844</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -224,41 +236,18 @@
     <MESSAGE value="feat(security): 新增公钥加密和签名验证功能，优化seed管理流程" />
     <MESSAGE value="feat(security): 新增HSM密钥存储配置及公钥加密、签名验证功，使用注意事项：软件模拟HSM功能。" />
     <MESSAGE value="feat(security): 添加AES密钥初始化和加密解密功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(security): 添加AES密钥初始化和加密解密功能" />
+    <MESSAGE value="fix(security): 调整测试python代码的RSA-OAEP参数以匹配Java端" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(security): 调整测试python代码的RSA-OAEP参数以匹配Java端" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java</url>
-          <line>55</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/notary/controller/NotaryController.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/com/notary/service/KeyManagementService.java</url>
-          <line>51</line>
-          <properties class="com.notary.service.KeyManagementService" method="registerUser">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="com.notary.service.KeyManagementService" memberName="userRepo" />
       </pinned-members>
     </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

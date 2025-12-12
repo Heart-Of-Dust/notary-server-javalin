@@ -52,7 +52,8 @@ public class NotaryController {
         // 新增seed管理路由
         app.post("/api/v1/seed/recover", controller::handleSeedRecovery);
         app.post("/api/v1/seed/change", controller::handleSeedChange);
-        }
+        app.get("/api/v1/public-key", controller::handleGetPublicKey);
+    }
 
     // 处理注册请求
     public void handleRegister(Context ctx) {
@@ -194,6 +195,35 @@ public class NotaryController {
             ctx.status(e.getStatusCode()).json(Map.of("error", e.getMessage(), "status", "error"));
         } catch (Exception e) {
             ctx.status(500).json(Map.of("error", "Seed change failed", "status", "error"));
+        }
+    }
+
+    public void handleGetPublicKey(Context ctx) {
+        try {
+            String userId = ctx.queryParam("userId");
+
+            if (userId == null || userId.trim().isEmpty()) {
+                throw new NotaryException("User ID is required", 400);
+            }
+
+            String publicKey = keyService.getPublicKeyByUserId(userId);
+
+            ctx.status(200).json(Map.of(
+                    "status", "success",
+                    "user_id", userId,
+                    "public_key", publicKey
+            ));
+
+        } catch (NotaryException e) {
+            ctx.status(e.getStatusCode()).json(Map.of(
+                    "error", e.getMessage(),
+                    "status", "error"
+            ));
+        } catch (Exception e) {
+            ctx.status(500).json(Map.of(
+                    "error", "Internal server error",
+                    "status", "error"
+            ));
         }
     }
 }

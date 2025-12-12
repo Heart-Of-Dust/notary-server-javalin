@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 密钥管理服务（用户注册、密钥生成与存储）
@@ -98,7 +99,7 @@ public class KeyManagementService {
             String fingerprint = cryptoService.calculateFingerprint(publicKey);
 
             // 8. 保存到数据库
-            userRepo.saveUserVault(userId, encryptedSeed, encryptedPrivateKey, fingerprint);
+            userRepo.saveUserVault(userId, encryptedSeed, encryptedPrivateKey, publicKey,fingerprint);
             log.info("User {} registered successfully, fingerprint: {}", userId, fingerprint);
 
             // 9. 生成根签名背书
@@ -129,6 +130,20 @@ public class KeyManagementService {
             throw new NotaryException("Registration failed: internal server error", 500);
         }
     }
+
+    public String getPublicKeyByUserId(String userId) {
+        try {
+            Optional<String> publicKeyOpt = userRepo.findPublicKeyByUserId(userId);
+            if (publicKeyOpt.isPresent()) {
+                return publicKeyOpt.get();
+            } else {
+                throw new NotaryException("User not found or public key not available", 404);
+            }
+        } catch (Exception e) {
+            throw new NotaryException("Failed to retrieve public key: " + e.getMessage(), 500);
+        }
+    }
+
     public SeedRecoveryResponse recoverSeed(String userId, String authProof, String clientPubKey) {
         // 1. 验证用户是否存在
         if (!userRepo.existsById(userId)) {
@@ -187,7 +202,7 @@ public class KeyManagementService {
 
     public Map<String, String> changeSeed(String userId, String oldAuthCode, String newEncryptedSeed) {
         // 1. 验证用户存在
-        UserKeyVault vault = userRepo.findById(userId)
+        UserKeyVault vault = userRepo.findActiveVaultByUserId(userId)
                 .orElseThrow(() -> new NotaryException("User not found", 404));
 
         try {

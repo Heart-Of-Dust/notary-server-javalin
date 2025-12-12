@@ -53,3 +53,5 @@ ALTER TABLE IF EXISTS notary_vault
 
 -- 为更新时间添加索引（可选）
 CREATE INDEX IF NOT EXISTS idx_notary_vault_updated_at ON notary_vault(updated_at);
+
+ALTER TABLE notary_vault ADD COLUMN signing_pub_key BYTEA;

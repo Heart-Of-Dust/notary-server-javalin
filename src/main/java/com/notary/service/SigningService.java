@@ -31,7 +31,7 @@ public class SigningService {
 
         try {
             // 1. 获取用户密钥
-            var userVault = userRepo.findById(userId)
+            var userVault = userRepo.findActiveVaultByUserId(userId)
                     .orElseThrow(() -> new NotaryException("User not found", 404));
 
             if (!"ACTIVE".equals(userVault.getStatus())) {

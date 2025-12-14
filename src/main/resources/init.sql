@@ -34,18 +34,25 @@ CREATE INDEX IF NOT EXISTS idx_audit_user_id ON notary_audit_log(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_timestamp ON notary_audit_log(action_timestamp);
 CREATE INDEX IF NOT EXISTS idx_audit_action_type ON notary_audit_log(action_type);
 
--- 创建撤销表（用于密钥撤销列表）
-CREATE TABLE IF NOT EXISTS key_revocation_list (
-    id BIGSERIAL PRIMARY KEY,
-    user_id VARCHAR(64) NOT NULL,
-    pub_key_fingerprint VARCHAR(64) NOT NULL,
-    revocation_reason VARCHAR(100),
-    revoked_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    revoked_by VARCHAR(64),
-    CONSTRAINT fk_revocation_user FOREIGN KEY (user_id)
-    REFERENCES notary_vault(user_id) ON DELETE CASCADE
-);
+-- 创建签名审计表
+CREATE TABLE IF NOT EXISTS signature_audit_log (
+     id BIGSERIAL PRIMARY KEY,
+     user_id VARCHAR(64) NOT NULL,
+     transaction_id VARCHAR(100) NOT NULL,
+     msg_hash TEXT NOT NULL,
+     client_ts_ms BIGINT NOT NULL,
+     verified_tsa_time BIGINT NOT NULL,
+     signature TEXT NOT NULL,
+     status VARCHAR(20) DEFAULT 'SUCCESS',
+     error_message TEXT,
+     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 
--- 创建撤销索引
-CREATE INDEX IF NOT EXISTS idx_revocation_fingerprint ON key_revocation_list(pub_key_fingerprint);
-CREATE INDEX IF NOT EXISTS idx_revocation_timestamp ON key_revocation_list(revoked_at);
+    -- 索引
+     CONSTRAINT fk_signature_user FOREIGN KEY (user_id)
+     REFERENCES notary_vault(user_id) ON DELETE CASCADE
+);
+-- 创建签名审计索引
+CREATE INDEX IF NOT EXISTS idx_signature_user_id ON signature_audit_log(user_id);
+CREATE INDEX IF NOT EXISTS idx_signature_timestamp ON signature_audit_log(created_at);
+CREATE INDEX IF NOT EXISTS idx_signature_transaction ON signature_audit_log(transaction_id);
+CREATE INDEX IF NOT EXISTS idx_signature_status ON signature_audit_log(status);

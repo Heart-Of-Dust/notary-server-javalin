@@ -64,7 +64,7 @@ public class CryptoService {
         mac.init(keySpec);
 
         byte[] hmacBytes = mac.doFinal(data);
-        return bytesToHex(hmacBytes);
+        return bytesToHex(hmacBytes);  // 确保返回Hex字符串格式
     }
 
     public byte[] signWithEd25519(byte[] privateKeyBytes, byte[] data) throws Exception {
